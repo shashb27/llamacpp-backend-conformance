@@ -1,0 +1,261 @@
+{
+  "per_backend": {
+    "cuda": {
+      "cells": 102,
+      "prompts": 3468,
+      "gen_exact_pct": 43.9,
+      "gen_exact_rstrip_pct": 43.9,
+      "first_divergences": 1944,
+      "gap_median_nats": 0.0726,
+      "gap_p10_nats": 0.0065,
+      "gap_p90_nats": 0.2938,
+      "gap_beyond_top5_pct": 0.2,
+      "ppl_delta_abs_median": 0.0106,
+      "ppl_bit_identical_cells": 17,
+      "divergent_gens_with_zero_ppl_delta": 295
+    },
+    "cuda13": {
+      "cells": 51,
+      "prompts": 1734,
+      "gen_exact_pct": 48.2,
+      "gen_exact_rstrip_pct": 48.2,
+      "first_divergences": 898,
+      "gap_median_nats": 0.0628,
+      "gap_p10_nats": 0.0062,
+      "gap_p90_nats": 0.2107,
+      "gap_beyond_top5_pct": 0.0,
+      "ppl_delta_abs_median": 0.0137,
+      "ppl_bit_identical_cells": 0,
+      "divergent_gens_with_zero_ppl_delta": 0
+    },
+    "rocm": {
+      "cells": 68,
+      "prompts": 2312,
+      "gen_exact_pct": 46.8,
+      "gen_exact_rstrip_pct": 46.8,
+      "first_divergences": 1231,
+      "gap_median_nats": 0.0584,
+      "gap_p10_nats": 0.0053,
+      "gap_p90_nats": 0.1945,
+      "gap_beyond_top5_pct": 0.0,
+      "ppl_delta_abs_median": 0.0,
+      "ppl_bit_identical_cells": 68,
+      "divergent_gens_with_zero_ppl_delta": 1231
+    },
+    "vulkan": {
+      "cells": 204,
+      "prompts": 6936,
+      "gen_exact_pct": 45.2,
+      "gen_exact_rstrip_pct": 45.2,
+      "first_divergences": 3802,
+      "gap_median_nats": 0.0579,
+      "gap_p10_nats": 0.0057,
+      "gap_p90_nats": 0.2228,
+      "gap_beyond_top5_pct": 0.1,
+      "ppl_delta_abs_median": 0.0388,
+      "ppl_bit_identical_cells": 0,
+      "divergent_gens_with_zero_ppl_delta": 0
+    }
+  },
+  "per_backend_quant": {
+    "cuda/f16": {
+      "prompts": 612,
+      "match": 552,
+      "gen_exact_pct": 90.2
+    },
+    "cuda/fp16": {
+      "prompts": 408,
+      "match": 381,
+      "gen_exact_pct": 93.4
+    },
+    "cuda/q4_k_m": {
+      "prompts": 1224,
+      "match": 168,
+      "gen_exact_pct": 13.7
+    },
+    "cuda/q8_0": {
+      "prompts": 1224,
+      "match": 423,
+      "gen_exact_pct": 34.6
+    },
+    "cuda13/f16": {
+      "prompts": 306,
+      "match": 286,
+      "gen_exact_pct": 93.5
+    },
+    "cuda13/fp16": {
+      "prompts": 204,
+      "match": 191,
+      "gen_exact_pct": 93.6
+    },
+    "cuda13/q4_k_m": {
+      "prompts": 612,
+      "match": 107,
+      "gen_exact_pct": 17.5
+    },
+    "cuda13/q8_0": {
+      "prompts": 612,
+      "match": 252,
+      "gen_exact_pct": 41.2
+    },
+    "rocm/f16": {
+      "prompts": 408,
+      "match": 371,
+      "gen_exact_pct": 90.9
+    },
+    "rocm/fp16": {
+      "prompts": 272,
+      "match": 254,
+      "gen_exact_pct": 93.4
+    },
+    "rocm/q4_k_m": {
+      "prompts": 816,
+      "match": 135,
+      "gen_exact_pct": 16.5
+    },
+    "rocm/q8_0": {
+      "prompts": 816,
+      "match": 321,
+      "gen_exact_pct": 39.3
+    },
+    "vulkan/f16": {
+      "prompts": 1224,
+      "match": 1056,
+      "gen_exact_pct": 86.3
+    },
+    "vulkan/fp16": {
+      "prompts": 816,
+      "match": 720,
+      "gen_exact_pct": 88.2
+    },
+    "vulkan/q4_k_m": {
+      "prompts": 2448,
+      "match": 486,
+      "gen_exact_pct": 19.9
+    },
+    "vulkan/q8_0": {
+      "prompts": 2448,
+      "match": 872,
+      "gen_exact_pct": 35.6
+    }
+  },
+  "per_category": {
+    "cuda/arithmetic": {
+      "prompts": 816,
+      "match": 465,
+      "gen_exact_pct": 57.0
+    },
+    "cuda/creative": {
+      "prompts": 714,
+      "match": 247,
+      "gen_exact_pct": 34.6
+    },
+    "cuda/factual": {
+      "prompts": 1122,
+      "match": 481,
+      "gen_exact_pct": 42.9
+    },
+    "cuda/reasoning": {
+      "prompts": 816,
+      "match": 331,
+      "gen_exact_pct": 40.6
+    },
+    "cuda13/arithmetic": {
+      "prompts": 408,
+      "match": 247,
+      "gen_exact_pct": 60.5
+    },
+    "cuda13/creative": {
+      "prompts": 357,
+      "match": 144,
+      "gen_exact_pct": 40.3
+    },
+    "cuda13/factual": {
+      "prompts": 561,
+      "match": 261,
+      "gen_exact_pct": 46.5
+    },
+    "cuda13/reasoning": {
+      "prompts": 408,
+      "match": 184,
+      "gen_exact_pct": 45.1
+    },
+    "rocm/arithmetic": {
+      "prompts": 544,
+      "match": 328,
+      "gen_exact_pct": 60.3
+    },
+    "rocm/creative": {
+      "prompts": 476,
+      "match": 190,
+      "gen_exact_pct": 39.9
+    },
+    "rocm/factual": {
+      "prompts": 748,
+      "match": 327,
+      "gen_exact_pct": 43.7
+    },
+    "rocm/reasoning": {
+      "prompts": 544,
+      "match": 236,
+      "gen_exact_pct": 43.4
+    },
+    "vulkan/arithmetic": {
+      "prompts": 1632,
+      "match": 939,
+      "gen_exact_pct": 57.5
+    },
+    "vulkan/creative": {
+      "prompts": 1428,
+      "match": 493,
+      "gen_exact_pct": 34.5
+    },
+    "vulkan/factual": {
+      "prompts": 2244,
+      "match": 984,
+      "gen_exact_pct": 43.9
+    },
+    "vulkan/reasoning": {
+      "prompts": 1632,
+      "match": 718,
+      "gen_exact_pct": 44.0
+    }
+  },
+  "control_pairs": {
+    "radeon-rx-7900-xtx-linux|radeon-rx-7900-xtx-2-linux|rocm": {
+      "prompts": 578,
+      "match": 270,
+      "cross_box_exact_pct": 46.7
+    },
+    "radeon-rx-7900-xtx-linux|radeon-rx-7900-xtx-2-linux|vulkan": {
+      "prompts": 578,
+      "match": 578,
+      "cross_box_exact_pct": 100.0
+    },
+    "rtx-5060-ti-linux|rtx-5060-ti-linux|cuda-vs-cuda13": {
+      "prompts": 578,
+      "match": 244,
+      "cross_box_exact_pct": 42.2
+    },
+    "rtx-pro-6000-blackwell-2-linux|rtx-pro-6000-blackwell-2-linux|cuda-vs-cuda13": {
+      "prompts": 578,
+      "match": 251,
+      "cross_box_exact_pct": 43.4
+    },
+    "rtx-pro-6000-blackwell-linux|rtx-pro-6000-blackwell-2-linux|cuda": {
+      "prompts": 578,
+      "match": 578,
+      "cross_box_exact_pct": 100.0
+    },
+    "rtx-pro-6000-blackwell-linux|rtx-pro-6000-blackwell-2-linux|vulkan": {
+      "prompts": 578,
+      "match": 578,
+      "cross_box_exact_pct": 100.0
+    },
+    "rtx-pro-6000-blackwell-linux|rtx-pro-6000-blackwell-linux|cuda-vs-cuda13": {
+      "prompts": 578,
+      "match": 251,
+      "cross_box_exact_pct": 43.4
+    }
+  }
+}

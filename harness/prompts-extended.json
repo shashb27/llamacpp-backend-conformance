@@ -1,0 +1,20 @@
+{
+  "prompts": [
+    {"category": "code", "prompt": "Write a Python function that checks whether a string is a palindrome."},
+    {"category": "code", "prompt": "Write a SQL query to find the second-highest salary in an employees table."},
+    {"category": "code", "prompt": "Write a JavaScript function that debounces a callback."},
+    {"category": "code", "prompt": "Write a Python function that reverses a linked list."},
+    {"category": "code", "prompt": "Write a bash one-liner that finds the ten largest files under the current directory."},
+    {"category": "code", "prompt": "Write a Python class implementing a stack with push, pop, and a method that returns the minimum element."},
+    {"category": "summarization", "prompt": "Summarize the plot of Romeo and Juliet in three sentences."},
+    {"category": "summarization", "prompt": "Summarize the key steps of the scientific method in a short paragraph."},
+    {"category": "summarization", "prompt": "Summarize the main causes of the French Revolution in a short paragraph."},
+    {"category": "summarization", "prompt": "Summarize how photosynthesis works in two sentences."},
+    {"category": "summarization", "prompt": "Summarize the rules of chess in one paragraph."},
+    {"category": "translation", "prompt": "Translate the sentence 'The early bird catches the worm' into French."},
+    {"category": "translation", "prompt": "Translate the sentence 'Where is the nearest train station?' into German."},
+    {"category": "translation", "prompt": "Translate the sentence 'I would like a cup of coffee, please' into Spanish."},
+    {"category": "translation", "prompt": "Translate the sentence 'Life is like a box of chocolates' into Japanese."},
+    {"category": "translation", "prompt": "Translate the sentence 'Thank you very much for your help' into Italian."}
+  ]
+}

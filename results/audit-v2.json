@@ -1,0 +1,401 @@
+{
+  "devices": {
+    "geforce-rtx-3060-ti-win|cuda": {
+      "n_models": 17,
+      "median_ratio": 0.195,
+      "device": "gpu"
+    },
+    "geforce-rtx-3060-ti-win|vulkan": {
+      "n_models": 17,
+      "median_ratio": 0.175,
+      "device": "gpu"
+    },
+    "intel-arc-a770-linux|vulkan": {
+      "n_models": 17,
+      "median_ratio": 0.458,
+      "device": "gpu"
+    },
+    "intel-arc-a770-win|vulkan": {
+      "n_models": 17,
+      "median_ratio": 0.299,
+      "device": "gpu"
+    },
+    "intel-arc-b60-linux|vulkan": {
+      "n_models": 17,
+      "median_ratio": 0.611,
+      "device": "gpu"
+    },
+    "radeon-8060s-ryzen-ai-max-linux|rocm": {
+      "n_models": 17,
+      "median_ratio": 1.0,
+      "device": "cpu_fallback"
+    },
+    "radeon-8060s-ryzen-ai-max-linux|vulkan": {
+      "n_models": 17,
+      "median_ratio": 0.663,
+      "device": "gpu"
+    },
+    "radeon-ai-pro-r9700-linux|rocm": {
+      "n_models": 17,
+      "median_ratio": 1.0,
+      "device": "cpu_fallback"
+    },
+    "radeon-ai-pro-r9700-linux|vulkan": {
+      "n_models": 17,
+      "median_ratio": 0.165,
+      "device": "gpu"
+    },
+    "radeon-rx-7900-xtx-2-linux|rocm": {
+      "n_models": 17,
+      "median_ratio": 1.0,
+      "device": "cpu_fallback"
+    },
+    "radeon-rx-7900-xtx-2-linux|vulkan": {
+      "n_models": 17,
+      "median_ratio": 0.103,
+      "device": "gpu"
+    },
+    "radeon-rx-7900-xtx-linux|rocm": {
+      "n_models": 17,
+      "median_ratio": 1.0,
+      "device": "cpu_fallback"
+    },
+    "radeon-rx-7900-xtx-linux|vulkan": {
+      "n_models": 17,
+      "median_ratio": 0.157,
+      "device": "gpu"
+    },
+    "rtx-4090-linux|cuda": {
+      "n_models": 17,
+      "median_ratio": 1.0,
+      "device": "cpu_fallback"
+    },
+    "rtx-5060-ti-linux|cuda": {
+      "n_models": 17,
+      "median_ratio": 0.395,
+      "device": "gpu"
+    },
+    "rtx-5060-ti-linux|cuda13": {
+      "n_models": 17,
+      "median_ratio": 1.01,
+      "device": "cpu_fallback"
+    },
+    "rtx-5060-ti-linux|vulkan": {
+      "n_models": 17,
+      "median_ratio": 0.429,
+      "device": "gpu"
+    },
+    "rtx-pro-6000-blackwell-2-linux|cuda": {
+      "n_models": 17,
+      "median_ratio": 0.089,
+      "device": "gpu"
+    },
+    "rtx-pro-6000-blackwell-2-linux|cuda13": {
+      "n_models": 17,
+      "median_ratio": 1.0,
+      "device": "cpu_fallback"
+    },
+    "rtx-pro-6000-blackwell-2-linux|vulkan": {
+      "n_models": 17,
+      "median_ratio": 0.103,
+      "device": "gpu"
+    },
+    "rtx-pro-6000-blackwell-linux|cuda": {
+      "n_models": 17,
+      "median_ratio": 0.062,
+      "device": "gpu"
+    },
+    "rtx-pro-6000-blackwell-linux|cuda13": {
+      "n_models": 17,
+      "median_ratio": 1.026,
+      "device": "cpu_fallback"
+    },
+    "rtx-pro-6000-blackwell-linux|vulkan": {
+      "n_models": 17,
+      "median_ratio": 0.07,
+      "device": "gpu"
+    },
+    "titan-rtx-linux|cuda": {
+      "n_models": 17,
+      "median_ratio": 0.168,
+      "device": "gpu"
+    },
+    "titan-rtx-linux|vulkan": {
+      "n_models": 17,
+      "median_ratio": 0.168,
+      "device": "gpu"
+    }
+  },
+  "skipped": {
+    "status_UNAVAILABLE": 36,
+    "status_FAILED": 15
+  },
+  "rerun_stability": {
+    "cells": 51,
+    "prompts": 1734,
+    "match": 1734,
+    "match_pct": 100.0
+  },
+  "populations": {
+    "POP-GPU": {
+      "by_backend": {
+        "cuda": {
+          "cells": 68,
+          "prompts": 2312,
+          "match": 999,
+          "exact_pct": 43.2
+        },
+        "vulkan": {
+          "cells": 187,
+          "prompts": 6358,
+          "match": 2875,
+          "exact_pct": 45.2
+        }
+      },
+      "by_machine": {
+        "geforce-rtx-3060-ti-win|cuda": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 262,
+          "exact_pct": 45.3
+        },
+        "geforce-rtx-3060-ti-win|vulkan": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 268,
+          "exact_pct": 46.4
+        },
+        "intel-arc-a770-linux|vulkan": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 259,
+          "exact_pct": 44.8
+        },
+        "intel-arc-a770-win|vulkan": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 267,
+          "exact_pct": 46.2
+        },
+        "intel-arc-b60-linux|vulkan": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 263,
+          "exact_pct": 45.5
+        },
+        "radeon-8060s-ryzen-ai-max-linux|vulkan": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 253,
+          "exact_pct": 43.8
+        },
+        "radeon-ai-pro-r9700-linux|vulkan": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 260,
+          "exact_pct": 45.0
+        },
+        "radeon-rx-7900-xtx-2-linux|vulkan": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 261,
+          "exact_pct": 45.2
+        },
+        "radeon-rx-7900-xtx-linux|vulkan": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 250,
+          "exact_pct": 43.3
+        },
+        "rtx-5060-ti-linux|cuda": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 242,
+          "exact_pct": 41.9
+        },
+        "rtx-5060-ti-linux|vulkan": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 274,
+          "exact_pct": 47.4
+        },
+        "rtx-pro-6000-blackwell-linux|cuda": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 242,
+          "exact_pct": 41.9
+        },
+        "rtx-pro-6000-blackwell-linux|vulkan": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 259,
+          "exact_pct": 44.8
+        },
+        "titan-rtx-linux|cuda": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 253,
+          "exact_pct": 43.8
+        },
+        "titan-rtx-linux|vulkan": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 261,
+          "exact_pct": 45.2
+        }
+      },
+      "pooled": {
+        "cells": 255,
+        "prompts": 8670,
+        "match": 3874,
+        "exact_pct": 44.7,
+        "ci95_prompt_clustered": [
+          40.7,
+          48.7
+        ]
+      }
+    },
+    "POP-BUILDCPU": {
+      "by_backend": {
+        "cuda": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 283,
+          "exact_pct": 49.0
+        },
+        "cuda13": {
+          "cells": 34,
+          "prompts": 1156,
+          "match": 570,
+          "exact_pct": 49.3
+        },
+        "rocm": {
+          "cells": 68,
+          "prompts": 2312,
+          "match": 1081,
+          "exact_pct": 46.8
+        }
+      },
+      "by_machine": {
+        "radeon-8060s-ryzen-ai-max-linux|rocm": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 266,
+          "exact_pct": 46.0
+        },
+        "radeon-ai-pro-r9700-linux|rocm": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 266,
+          "exact_pct": 46.0
+        },
+        "radeon-rx-7900-xtx-2-linux|rocm": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 283,
+          "exact_pct": 49.0
+        },
+        "radeon-rx-7900-xtx-linux|rocm": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 266,
+          "exact_pct": 46.0
+        },
+        "rtx-4090-linux|cuda": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 283,
+          "exact_pct": 49.0
+        },
+        "rtx-5060-ti-linux|cuda13": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 304,
+          "exact_pct": 52.6
+        },
+        "rtx-pro-6000-blackwell-linux|cuda13": {
+          "cells": 17,
+          "prompts": 578,
+          "match": 266,
+          "exact_pct": 46.0
+        }
+      },
+      "pooled": {
+        "cells": 119,
+        "prompts": 4046,
+        "match": 1934,
+        "exact_pct": 47.8,
+        "ci95_prompt_clustered": [
+          43.7,
+          51.7
+        ]
+      }
+    }
+  },
+  "per_quant": {
+    "POP-GPU": {
+      "f16": {
+        "prompts": 2550,
+        "match": 2244,
+        "exact_pct": 88.0
+      },
+      "q4_k_m": {
+        "prompts": 3060,
+        "match": 550,
+        "exact_pct": 18.0
+      },
+      "q8_0": {
+        "prompts": 3060,
+        "match": 1080,
+        "exact_pct": 35.3
+      }
+    },
+    "POP-BUILDCPU": {
+      "f16": {
+        "prompts": 1190,
+        "match": 1103,
+        "exact_pct": 92.7
+      },
+      "q4_k_m": {
+        "prompts": 1428,
+        "match": 253,
+        "exact_pct": 17.7
+      },
+      "q8_0": {
+        "prompts": 1428,
+        "match": 578,
+        "exact_pct": 40.5
+      }
+    }
+  },
+  "gap_accounting": {
+    "comparisons": 14450,
+    "divergent": 7875,
+    "exact_match": 6575,
+    "first_div_events": 7875,
+    "gap_backend_computable": 7866,
+    "gap_backend_not_in_top5": 9,
+    "gap_ref_computable": 7866,
+    "gap_ref_not_in_top5": 9
+  },
+  "gap_ref_quantiles": {
+    "n": 7866,
+    "median": 0.0622,
+    "p90": 0.2309,
+    "p99": 0.5641,
+    "max": 1.2438
+  },
+  "gap_backend_quantiles": {
+    "n": 7866,
+    "median": 0.0588,
+    "p90": 0.2261,
+    "p99": 0.5375,
+    "max": 1.7158
+  },
+  "in_top5_pct_of_first_div": 99.89,
+  "dedup": {
+    "first_div_events_all": 7875,
+    "first_div_events_dedup": 6903,
+    "dropped_duplicate_stack_events": 972
+  }
+}

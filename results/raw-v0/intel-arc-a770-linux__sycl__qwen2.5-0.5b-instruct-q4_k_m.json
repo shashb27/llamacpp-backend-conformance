@@ -1,0 +1,97 @@
+{
+  "schema": 1,
+  "created": "2026-10-02T01:16:18.199202+00:00",
+  "label": "intel-arc-a770-linux",
+  "platform": "linux",
+  "gpu_detected": "Intel Corporation RocketLake-S GT1 [UHD Graphics 750] (rev 04)",
+  "backend": "sycl",
+  "model": "qwen2.5-0.5b-instruct-q4_k_m",
+  "model_sha256": "74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db",
+  "release_tag": "b11327",
+  "config": {
+    "n_predict": 128,
+    "ctx_size": 2048,
+    "batch_size": 512,
+    "seed": 42,
+    "temperature": 0.0
+  },
+  "status": "FAILED",
+  "error": "failed steps: ['The capital of France is', 'The three states of matter are', 'Photosynthesis is the process by which', 'To make a cup of tea, first', 'The Pythagorean theorem states that', 'In computer science, binary search works by', 'A prime number is a natural number', 'The water on Earth', 'perplexity']",
+  "prompts": [
+    {
+      "prompt": "The capital of France is",
+      "rc": 127,
+      "gen": null,
+      "stdout_tail": "",
+      "stderr_tail": "<run-dir>/bins/llama-b11327-bin-ubuntu-sycl-fp16-x64.tar.gz.d/llama-b11327/llama-cli: error while loading shared libraries: libsvml.so: cannot open shared object file: No such file or directory\n",
+      "wall_s": 0.0
+    },
+    {
+      "prompt": "The three states of matter are",
+      "rc": 127,
+      "gen": null,
+      "stdout_tail": "",
+      "stderr_tail": "<run-dir>/bins/llama-b11327-bin-ubuntu-sycl-fp16-x64.tar.gz.d/llama-b11327/llama-cli: error while loading shared libraries: libsvml.so: cannot open shared object file: No such file or directory\n",
+      "wall_s": 0.0
+    },
+    {
+      "prompt": "Photosynthesis is the process by which",
+      "rc": 127,
+      "gen": null,
+      "stdout_tail": "",
+      "stderr_tail": "<run-dir>/bins/llama-b11327-bin-ubuntu-sycl-fp16-x64.tar.gz.d/llama-b11327/llama-cli: error while loading shared libraries: libsvml.so: cannot open shared object file: No such file or directory\n",
+      "wall_s": 0.0
+    },
+    {
+      "prompt": "To make a cup of tea, first",
+      "rc": 127,
+      "gen": null,
+      "stdout_tail": "",
+      "stderr_tail": "<run-dir>/bins/llama-b11327-bin-ubuntu-sycl-fp16-x64.tar.gz.d/llama-b11327/llama-cli: error while loading shared libraries: libsvml.so: cannot open shared object file: No such file or directory\n",
+      "wall_s": 0.0
+    },
+    {
+      "prompt": "The Pythagorean theorem states that",
+      "rc": 127,
+      "gen": null,
+      "stdout_tail": "",
+      "stderr_tail": "<run-dir>/bins/llama-b11327-bin-ubuntu-sycl-fp16-x64.tar.gz.d/llama-b11327/llama-cli: error while loading shared libraries: libsvml.so: cannot open shared object file: No such file or directory\n",
+      "wall_s": 0.0
+    },
+    {
+      "prompt": "In computer science, binary search works by",
+      "rc": 127,
+      "gen": null,
+      "stdout_tail": "",
+      "stderr_tail": "<run-dir>/bins/llama-b11327-bin-ubuntu-sycl-fp16-x64.tar.gz.d/llama-b11327/llama-cli: error while loading shared libraries: libsvml.so: cannot open shared object file: No such file or directory\n",
+      "wall_s": 0.0
+    },
+    {
+      "prompt": "A prime number is a natural number",
+      "rc": 127,
+      "gen": null,
+      "stdout_tail": "",
+      "stderr_tail": "<run-dir>/bins/llama-b11327-bin-ubuntu-sycl-fp16-x64.tar.gz.d/llama-b11327/llama-cli: error while loading shared libraries: libsvml.so: cannot open shared object file: No such file or directory\n",
+      "wall_s": 0.0
+    },
+    {
+      "prompt": "The water on Earth",
+      "rc": 127,
+      "gen": null,
+      "stdout_tail": "",
+      "stderr_tail": "<run-dir>/bins/llama-b11327-bin-ubuntu-sycl-fp16-x64.tar.gz.d/llama-b11327/llama-cli: error while loading shared libraries: libsvml.so: cannot open shared object file: No such file or directory\n",
+      "wall_s": 0.0
+    }
+  ],
+  "ppl": {
+    "rc": 127,
+    "value": null,
+    "stdout_tail": "",
+    "stderr_tail": "<run-dir>/bins/llama-b11327-bin-ubuntu-sycl-fp16-x64.tar.gz.d/llama-b11327/llama-perplexity: error while loading shared libraries: libsvml.so: cannot open shared object file: No such file or directory\n",
+    "wall_s": 0.0
+  },
+  "asset": {
+    "name": "llama-b11327-bin-ubuntu-sycl-fp16-x64.tar.gz",
+    "sha256": "356e2b81b3e81c74e423ffb02a9221287a0e001b757db5d374cc1f7b2a8271bc"
+  }
+}

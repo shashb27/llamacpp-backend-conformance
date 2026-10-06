@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "created": "2026-10-02T01:17:20.597904+00:00",
+  "label": "geforce-rtx-5090-linux",
+  "platform": "linux",
+  "gpu_detected": "NVIDIA GeForce RTX 5090",
+  "backend": "cuda13",
+  "model": "qwen2.5-0.5b-instruct-q4_k_m",
+  "model_sha256": "74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db",
+  "release_tag": "b11327",
+  "config": {
+    "n_predict": 128,
+    "ctx_size": 2048,
+    "batch_size": 512,
+    "seed": 42,
+    "temperature": 0.0
+  },
+  "status": "UNAVAILABLE",
+  "error": "insufficient disk for runtime: need ~1259 MB, free 243 MB",
+  "prompts": [],
+  "ppl": null
+}
