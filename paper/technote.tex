@@ -91,15 +91,18 @@ identical stacks.
 \textbf{Fleet.} 12 physical machines (13 run labels; one machine was
 measured twice, 12 hours apart, and its re-run is used only as a
 stability control): NVIDIA (RTX 5060 Ti, RTX PRO 6000 Blackwell, TITAN
-RTX, RTX 3060 Ti/Windows), AMD (RX 7900 XTX $\times$2, Radeon AI PRO
-R9700, Strix Halo 8060S), Intel (Arc A770 Linux + Windows, Arc B60);
-hosts span several CPU generations and both desktop OSes.
+RTX, RTX 3060 Ti/Windows, and a virtualized RTX 4090 guest that turned
+out to have no GPU passthrough --- \S\ref{sec:fallback}), AMD (RX 7900
+XTX $\times$2, Radeon AI PRO R9700, Strix Halo 8060S), Intel (Arc A770
+Linux + Windows, Arc B60); hosts span several CPU generations and both
+desktop OSes.
 
 \textbf{Engine and models.} llama.cpp release b11327, official
-prebuilt binaries only, SHA256 recorded. 17 core GGUF models:
+prebuilt binaries only, SHA256 recorded. 17 core GGUF model files:
 Qwen2.5-Instruct 0.5B/1.5B/3B and SmolLM2-Instruct 135M/360M/1.7B at
-Q4\_K\_M, Q8\_0, and F16/FP16 (official Qwen-org quantizations;
-community re-quantizations for SmolLM2 --- provenance is a caveat for
+Q4\_K\_M and Q8\_0, plus F16/FP16 for the five models up to 1.7B ---
+the 3B was not run at F16 --- with official Qwen-org quantizations
+and community re-quantizations for SmolLM2 (provenance is a caveat for
 family comparisons).
 
 \textbf{Protocol.} 34 fixed raw-completion prompts (no chat template;
@@ -183,7 +186,7 @@ actually mapped in the server process.
 \section{Finding 2: conformance on verified runs}\label{sec:conformance}
 
 On runs verified to execute on the GPU (CUDA on 4 machines, Vulkan on
-10; 255 cells after removing the re-run), byte-exact agreement with
+11; 255 cells after removing the re-run), byte-exact agreement with
 the same-box CPU reference is:
 
 \begin{center}
