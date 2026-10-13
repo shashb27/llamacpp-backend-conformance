@@ -12,6 +12,21 @@ Where backends disagree, that's either a real numerical bug worth reporting upst
 
 v1.0 dataset complete: 425 measured (model, backend, hardware) cells across 13 hardware labels (NVIDIA, AMD, Intel), pinned to a single llama.cpp release. Canonical summary: `results/audit-v2.json` and `results/matrix.md`. Full write-up: [paper/technote.pdf](paper/technote.pdf).
 
+## Correction (Oct 2026)
+
+An earlier comment I posted on llama.cpp issue #26964 said the "ROCm"
+generations came back bit-identical to the CPU backend's on the same host.
+That part is wrong, and I want it on the record here. What matched exactly
+was **perplexity** — 68/68 cells, at the tool's printed precision. The
+fallback generations matched the standalone CPU build's generations at
+**46.8%** overall: the ROCm build fell back to its *own* bundled CPU
+implementation, which is a different build's CPU code than the reference
+build. The evidence for the fallback itself is unaffected — wall-time ratio
+~1.0 vs the CPU build, no HIP library in the server's process maps, idle
+VRAM with an explicit `-ngl 999`. Corrected numbers:
+[`results/audit-v2.json`](results/audit-v2.json)
+(`populations.POP-BUILDCPU.by_backend.rocm`).
+
 ## Data layout
 
 In-repo: the harness, the analysis outputs (`results/analysis*.json`, `results/matrix*`), the device-truth audit (`results/audit-v2.json`), hardware/driver versions (`results/hardware-versions.md`), the pilot batch (`results/raw-v0/`), quarantined cells (`results/raw-excluded-4090-vulkan/`), and pinned-device verifications (`results/vk-verify/`).
