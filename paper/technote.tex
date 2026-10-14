@@ -29,14 +29,16 @@ actually executed each run} --- screening every (machine, backend)
 configuration via per-prompt wall-time ratios against the same-box CPU
 build, with direct on-box corroboration (process maps, VRAM readings,
 library-load checks) for a subset --- turned out to be the decisive
-methodological step: three distinct failure classes silently served
-inference from the CPU while presenting as GPU backends, including the
+methodological step: three distinct failure classes served
+inference from the CPU while presenting as GPU backends --- continuing
+without a fatal error, with only a single easy-to-miss stderr warning
+--- including the
 official ROCm build on four AMD hosts (its backend library requires
 ROCm userspace SONAMEs one major version newer than the ROCm 6.3.0
 installations on our hosts, and the release bundles no Linux ROCm
 runtime), a CUDA-13 build deprived of its runtime libraries by our own
-launch environment, and a virtualized host with no GPU passthrough at
-all. On runs classified as GPU-executed by this audit, byte-exact
+launch environment, and a virtualized host without access to its
+advertised NVIDIA GPU. On runs classified as GPU-executed by this audit, byte-exact
 agreement with
 the same-box CPU reference is quantization-dominated and
 monotone --- F16 88.0\%, Q8\_0 35.3\%, Q4\_K\_M 18.0\% of 8{,}670
@@ -55,7 +57,8 @@ in a same-machine 12-hour re-run of
 51 cells. We release the harness, per-token logprob records, and the
 device-truth audit method. Practical conclusions: verify actual
 execution placement before labeling any measurement with a backend
-name; treat quantized artifacts as non-portable across stacks at
+name; do not assume exact-output portability for quantized artifacts
+when changing the numerical implementation at
 Q4-class precision; and do not use default-tool perplexity as a
 conformance signal.
 \end{abstract}
@@ -73,20 +76,22 @@ The first question became the pivot of the study. We began by comparing
 backends on a multi-vendor fleet and initially read the results as
 backend behavior. A device-truth audit --- comparing every run's
 per-prompt generation wall time against the same-box CPU build ---
-revealed that three of our ``GPU backend'' columns had silently served
-from the CPU: the official ROCm build on all four AMD hosts, the
+revealed that three of our ``GPU backend'' columns had served
+from the CPU without a fatal error: the official ROCm build on all
+four AMD hosts, the
 CUDA-13 build on both hosts offering it, and CUDA on a virtualized
 host. Only the first involves the upstream binary's runtime
 requirements; the second was a
 launch-environment mistake in our own harness (which had passed the
 runtime-library path to device enumeration but not to the server
-process); the third was a virtual machine with no GPU passthrough. All
+process); the third was a virtual machine without access to its
+advertised NVIDIA GPU. All
 three served HTTP requests normally, without a fatal startup error ---
 the only console indication is a single easy-to-miss stderr warning.
 ROCm device enumeration returned no device; in the CUDA-13 case,
 enumeration succeeded under a different environment from the server
 and therefore did not establish server offload. Enumeration, we
-conclude, is not evidence of execution.
+conclude, does not by itself establish execution.
 
 The audit changed the study's claims in both directions. It led us to
 withdraw findings we had briefly believed (a ``CUDA-toolkit changes
@@ -103,11 +108,13 @@ controls.
 \section{Method}\label{sec:method}
 
 \textbf{Fleet.} 12 machines, one of them a virtualized guest (13 run
-labels; one machine was measured twice, 12 hours apart, and its re-run
-is used only as a stability control): NVIDIA (RTX 5060 Ti, RTX PRO 6000
-Blackwell, TITAN
-RTX, RTX 3060 Ti/Windows, and a virtualized RTX 4090 guest that turned
-out to have no GPU passthrough --- \S\ref{sec:fallback}), AMD (RX 7900
+labels; one machine was measured twice, 12 hours apart; the re-run is
+excluded from the primary conformance table, used as a stability
+control, and included in the full divergence-event analysis):
+NVIDIA (RTX 5060 Ti, RTX PRO 6000 Blackwell, TITAN
+RTX, RTX 3060 Ti/Windows, and a virtualized RTX 4090 guest that
+turned out to lack access to its advertised NVIDIA GPU
+--- \S\ref{sec:fallback}), AMD (RX 7900
 XTX $\times$2, Radeon AI PRO R9700, Strix Halo 8060S), Intel (Arc A770
 Linux + Windows, Arc B60); hosts span several CPU generations and both
 desktop OSes.
@@ -144,7 +151,7 @@ by per-record device listings where available. A configuration at
 $\approx 1.0$ is classified \emph{CPU-fallback} and analyzed as a
 separate population, not as a GPU backend.
 
-\section{Finding 1: silent CPU fallback}\label{sec:fallback}
+\section{Finding 1: non-fatal CPU fallback}\label{sec:fallback}
 
 Three failure classes, one user-visible behavior: the server accepts
 requests and generates normally; the only console indication is a
@@ -163,7 +170,7 @@ including an RX 7900 XTX, an officially supported target ---
 \texttt{--list-devices} prints \texttt{(none)}, and the server runs
 fully on the CPU, \emph{including with an explicit \texttt{-ngl 999}}:
 process maps show no HIP library, VRAM stays idle, and generation
-proceeds at exactly CPU-build speed. The perplexity tool is subject to
+proceeds at approximately the standalone CPU build's speed. The perplexity tool is subject to
 the same backend failure, so its values are host-CPU values; on our
 data the ``ROCm'' perplexity matched the CPU build's in 68 of 68 cells
 (at the tool's printed precision). The ``ROCm'' generations, however,
@@ -175,9 +182,9 @@ three AMD hosts sharing a host-CPU class (578/578 pairwise),
 consistent with same-build, same-CPU-class execution. Related reports
 exist upstream for Windows and other setups; our contribution is the
 Linux SONAME detail, the cross-host confirmation, and the benchmarking
-consequence: quality measurements taken this way silently measure
-\emph{a} CPU implementation --- the fallback build's own, not the
-standalone CPU build's.
+consequence: quality measurements taken this way measure \emph{a} CPU
+implementation --- the fallback build's own, not the standalone CPU
+build's --- while presenting as GPU measurements.
 
 \textbf{(b) Runtime-library environment mistakes (our own).} Our
 harness passed the CUDA runtime-library path
@@ -185,8 +192,8 @@ harness passed the CUDA runtime-library path
 perplexity tool, but not to the server process. On hosts where
 \texttt{libcudart.so.13} exists only in the release's runtime tarball,
 the CUDA-13 backend loaded for \texttt{--list-devices} --- which
-therefore reported the GPU --- but not for the server, which silently
-served from the CPU. An on-box A/B check isolates the effect: with the
+therefore reported the GPU --- but not for the server, which served
+from the CPU without a fatal error. An on-box A/B check isolates the effect: with the
 environment set, the CUDA-13 build offloads under the default
 \texttt{-ngl auto} at 667 tok/s; without it, even \texttt{-ngl 999}
 runs on the CPU at 203 tok/s with 2\,MiB VRAM in use. The CUDA-12.8
@@ -207,10 +214,11 @@ only within the CPU-fallback population and note that our earlier
 ``virtualized 4090'' hardware label was wrong.
 
 \textbf{Detection.} None of the three classes produced a fatal startup
-error, and \texttt{--list-devices} is unreliable in both directions:
-it returned no device in the ROCm class, yet reported the GPU in the
-CUDA-13 case --- from a process running in a different environment
-than the server. The wall-time-ratio audit caught all three, and it is
+error. Enumeration correctly reported no device when the ROCm backend
+could not load; in the CUDA-13 case it reported the GPU --- from a
+process running in a different environment than the server, so that
+result did not establish server offload. The wall-time-ratio audit
+caught all three, and it is
 cheap: it requires only a CPU-build baseline on the same host. We
 recommend it as a standing screening check in any benchmarking or
 conformance setup, followed by post-launch verification that the
@@ -239,19 +247,29 @@ Same CPU build, different host-CPU class (23 pairs) & 13.7--20.1\% & 35.3--39.2\
 
 \noindent Denominators are prompt comparisons. F16/FP16 covers five
 model files and Q4\_K\_M/Q8\_0 cover six (Qwen2.5-3B was not run at
-F16); cross-host rows compare 578 prompts per pair.
+F16); cross-host rows compare 578 model--prompt combinations per
+pair, pooled across precisions. Equivalence classes are empirical ---
+groups of hosts whose standalone CPU-build outputs are identical
+across all 578 combinations (class A: seven Linux hosts, including
+the TITAN RTX and PRO 6000; class B: the second 7900 XTX host and
+the 4090 guest; the 5060 Ti host is a singleton). Cross-host rows
+use the Linux CPU binary only; the two Windows hosts agree with each
+other under the Windows CPU build and are excluded from these rows.
 
-Three observations. First, quantization dominates: within every
-population the rates are monotone in precision, and the pooled
+Three observations. First, among the GPU/CPU, cross-build CPU, and
+cross-class CPU comparisons, agreement increased strongly with
+precision, and the pooled
 ``$\sim$45--48\% agreement'' that a fixed quant mix produces is a
-mixture artifact --- per-precision rates span 14\% to 100\%. Second,
+mixture artifact --- per-precision rates span 14\% to 93\% in these
+populations; in contrast, all tested same-class CPU host pairs agreed
+completely at every precision. Second,
 the comparison type is a second-order effect: GPU-vs-CPU, one
 build's CPU implementation vs another's (including the ROCm and
 CUDA-13 fallback columns, reclassified), and cross-class CPU-vs-CPU
-all follow the same precision ordering, with rates within a few
-points of each other at each precision. Byte-exact portability
-across \emph{the stack changes we tested} is largely absent at
-Q4-class precision and partially preserved at F16. Third, the CPU
+all follow the same precision ordering. Excepting same-class host
+moves, byte-exact portability across \emph{the stack changes we
+tested} is largely absent at Q4-class precision and partially
+preserved at F16. Third, the CPU
 reference is itself stack-relative in two senses: the same CPU build
 produces bit-identical outputs across all hosts within a host-CPU
 equivalence class (our fleet has two such Linux classes plus a
@@ -279,19 +297,22 @@ prefill/decode arithmetic; our protocol runs with caching disabled.)
 
 Among the 7{,}875 first-divergence events (6{,}903 after removing
 identical-stack duplicates; the figures below use the full set, on
-which the deduplicated percentages agree to within 0.01), the
+which the deduplicated percentages agree to within 0.01 percentage
+points), the
 diverging backend's chosen token lies within the reference's recorded
 top-5 in 99.89\% of events. The exceptions are concentrated in
 SmolLM2 Q4\_K\_M at two (model, prompt) loci --- 9 reference-side and
 9 backend-side exceptions that overlap in only 5 events. The events
 span all comparison populations: 4{,}796 GPU-vs-CPU, 2{,}112
 build-CPU-vs-CPU, and 967 from the re-run machine's cells against its
-own CPU reference. For the 7{,}866 events where each side's choice
-appears in the other's recorded top-5, the gap can be measured in
-both distributions: the reference's preference for its own argmax over the
-backend's choice has median 0.062 nats (p90 0.231, p99 0.564); the
-backend's preference for its choice over the reference's has median
-0.059 nats (p90 0.226). Hand inspection of sampled divergences shows
+own CPU reference. Each directional gap is available for 7{,}866
+events (both gaps jointly for 7{,}862 of them); the quantiles below
+use each direction's available events separately. In the reference
+distribution, the preference for its own argmax over the backend's
+choice has median 0.062 nats (p90 0.231, p99 0.564); in the backend's
+distribution, the preference for its choice over the reference's has
+median 0.059 nats (p90 0.226). Hand inspection of sampled divergences
+shows
 rank-1$\leftrightarrow$2 swaps. Divergence at greedy decoding is
 therefore concentrated at near-ties --- compatible with the
 rounding-order mechanism assumed in prior work, though our data does
@@ -330,7 +351,7 @@ al.~\cite{pham2020}.
 \section{Limitations}\label{sec:limitations}
 
 One engine, one release (b11327) --- rates may drift across
-releases, while the silent-fallback classes and the audit method are
+releases, while the fallback classes and the audit method are
 the durable content. Results cover models from 135M to 3B;
 portability to larger models is unmeasured. Raw-completion prompts
 without chat templates may produce different output distributions
@@ -345,18 +366,23 @@ then crashed mid-run).
 \section{Conclusion}\label{sec:conclusion}
 
 For practitioners: (1) verify what executed --- the wall-time ratio
-against a CPU baseline is a cheap screening check for silent CPU
+against a CPU baseline is a cheap screening check for non-fatal CPU
 fallback, to be followed by execution-placement checks in the server
-process, and \texttt{--list-devices} is not evidence of execution;
-(2) expect byte-exact greedy output to be non-portable across the
-stack changes we tested at Q4-class precision (18\% agreement),
-partially portable at Q8 (35\%), and mostly preserved at F16 (88\%);
-(3) our identical-stack controls reproduced all tested outputs ---
+process, and \texttt{--list-devices} output alone does not establish
+execution; (2) GPU-versus-local-CPU agreement was 18\%, 35\%, and
+88\% at Q4, Q8, and F16 respectively, with cross-build and
+cross-class CPU comparisons showing the same ordering --- whereas
+same-class CPU host pairs agreed completely; do not assume
+exact-output portability when changing numerical implementations at
+Q4-class precision; (3) our identical-stack controls reproduced all
+tested outputs ---
 pin backend, binary, GPU, and driver if you need reproducibility,
 and specify the complete execution configuration when claiming it;
 (4) do not treat default-tool perplexity as evidence of behavioral
 equivalence. We release the harness, the
-per-token logprob dataset, and the audit tooling.
+per-token logprob dataset, and the audit tooling at
+\url{https://github.com/shashb27/llamacpp-backend-conformance}
+(dataset: v1.0 release).
 
 \begin{thebibliography}{12}
 \small
@@ -397,7 +423,7 @@ backends on LLM reproducibility.
 \bibitem{gond2026}
 R.~Gond, A.~K.~Kamath, R.~Ramjee, and A.~Panwar.
 \newblock LLM-42: Enabling determinism in LLM inference with verified
-specusion.
+speculation.
 \newblock \emph{arXiv preprint} arXiv:2601.17768, 2026.
 
 \bibitem{du2026}
