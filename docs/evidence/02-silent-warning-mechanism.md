@@ -11,7 +11,7 @@ reading the tagged source and by our on-box logs.
 `ggml/src/ggml-backend-reg.cpp`, `ggml_backend_load_all_from_path()`:
 
 ```c
-void ggml_backend_load_all_from_path(const fs::path & dir_path) {
+void ggml_backend_load_all_from_path(const char * dir_path) {
 #ifdef NDEBUG
     bool silent = true;
 #else
@@ -27,8 +27,8 @@ builds (`NDEBUG` defined), so the load failure produces **no output**.
 
 ## Mechanism 2 — the only "no usable GPU" warning lives inside the `-ngl` option handler
 
-`common/arg.cpp`, inside the handler for the `-ngl/--gpu-layers`
-option (and its `-ngl-draft` twin):
+`common/arg.cpp`, inside the handler for the `-ngl`/`--gpu-layers`
+option (and its `-ngld`/`--gpu-layers-draft` twin):
 
 ```c
 } else {
@@ -73,7 +73,7 @@ host with no usable GPU. The warning is then suppressed **even when
   [01-rocm-backend-load-failure.md](01-rocm-backend-load-failure.md)
   and [04-4090-guest-no-gpu.md](04-4090-guest-no-gpu.md)).
 - A grep of the failing servers' logs for
-  `backend|offload|hip|gpu|device|warning` returns **nothing** —
+  `backend|offload|hip|gpu|device` returns **nothing** —
   including a run launched with explicit `-ngl 999`.
 - Note for anyone auditing logs on this release: b11327's server prints
   no "offloaded X/Y layers" lines even when offload **succeeds**, so

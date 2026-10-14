@@ -30,8 +30,8 @@ configuration via per-prompt wall-time ratios against the same-box CPU
 build, with direct on-box corroboration (process maps, VRAM readings,
 library-load checks) for a subset --- turned out to be the decisive
 methodological step: three distinct failure classes silently served
-inference from the CPU while presenting as GPU backends --- in every
-fallback run the console carried no GPU-related output at all ---
+inference from the CPU while presenting as GPU backends --- no
+GPU-related console output appeared in any diagnosed fallback run ---
 including the
 official ROCm build on four AMD hosts (its backend library requires
 ROCm userspace SONAMEs one major version newer than the stock ROCm
@@ -88,13 +88,16 @@ launch-environment mistake in our own harness (which had passed the
 runtime-library path to device enumeration but not to the server
 process); the third was a virtual machine without access to its
 advertised NVIDIA GPU. All
-three served HTTP requests normally, with no GPU-related console
-output in any of our runs --- no error, no warning, no offload
-summary. The silence is structural, not incidental: release builds
+three served HTTP requests normally; in every run we diagnosed
+directly the console carried no GPU-related output at all --- no
+error, no warning, no offload summary --- and none can have appeared
+in the sweep runs either, since their servers were never passed
+\texttt{-ngl}, the warning's only trigger. The silence is
+structural, not incidental: release builds
 suppress backend-load failures entirely, and the engine's ``no usable
 GPU found'' warning is printed only when \texttt{-ngl} is passed
 explicitly --- and even then suppressed whenever the bundled RPC
-backend is registered, as it was in all our fallback runs. ROCm
+backend is registered, as it was in every run we diagnosed. ROCm
 device enumeration returned no device; in the CUDA-13 case,
 enumeration succeeded under a different environment from the server
 and therefore did not establish server offload. Enumeration, we
@@ -162,7 +165,8 @@ separate population, not as a GPU backend.
 \section{Finding 1: silent CPU fallback}\label{sec:fallback}
 
 Three failure classes, one user-visible behavior: the server accepts
-requests and generates normally, and in every fallback run the
+requests and generates normally, and in every fallback run we
+diagnosed the
 console carried no GPU-related output at all --- no error, no
 warning, no offload summary, not even with an explicit
 \texttt{-ngl 999}. The engine's source at this release explains the
@@ -171,9 +175,9 @@ suppressed; the ``no usable GPU found'' warning in
 \texttt{common/arg.cpp} fires only inside the \texttt{-ngl} option
 handler; and even there it is guarded by
 \texttt{llama\_supports\_gpu\_offload()}, which returns true
-whenever the bundled RPC backend is registered --- as it was in all
-our runs (its library appears in the process maps). The process
-serves on the CPU regardless.
+whenever the bundled RPC backend is registered --- as it was in every
+run we diagnosed (its library appears in the process maps). The
+process serves on the CPU regardless.
 
 \textbf{(a) Missing backend userspace (upstream-relevant).} The
 official ROCm release asset (named \texttt{rocm-10.0}) ships a
@@ -183,10 +187,13 @@ official ROCm release asset (named \texttt{rocm-10.0}) ships a
 stock ROCm 6.3.0 userspace, provides
 \texttt{.so.6/.so.2/.so.4}; and the release bundles no Linux ROCm
 runtime (a Windows runtime zip exists; the Linux equivalent does
-not). The
-backend library therefore never loads on any of our four AMD hosts,
-including an RX 7900 XTX ---
-\texttt{--list-devices} prints \texttt{(none)}, and the server runs
+not). On the directly diagnosed host (an RX 7900 XTX) the backend
+library never loads;
+on the other three AMD hosts the same failure follows from the
+CPU-class wall-time signature, printed-precision perplexity equality,
+and mutually bit-identical fallback outputs. On all four,
+\texttt{-{}-list-devices} prints \texttt{(none)} (recorded per-record
+in the supplemental runs), and the server runs
 fully on the CPU, \emph{including with an explicit \texttt{-ngl 999}}:
 process maps show no HIP library, VRAM stays idle, and generation
 proceeds at approximately the standalone CPU build's speed. The perplexity tool is subject to
@@ -213,7 +220,7 @@ harness passed the CUDA runtime-library path
 (\texttt{LD\_LIBRARY\_PATH}) to device enumeration and to the
 perplexity tool, but not to the server process. On hosts where
 \texttt{libcudart.so.13} exists only in the release's runtime tarball,
-the CUDA-13 backend loaded for \texttt{--list-devices} --- which
+the CUDA-13 backend loaded for \texttt{-{}-list-devices} --- which
 therefore reported the GPU --- but not for the server, which served
 from the CPU without a fatal error. An on-box A/B check isolates the
 effect at matched settings (\texttt{-ngl 999} both times): with the
@@ -224,7 +231,7 @@ host, the CUDA-12.8
 build was unaffected because the system carries CUDA 12.9
 libraries. We retract the preliminary ``CUDA-13 behaves like a
 different backend'' observation that this artifact produced, and note
-the general lesson: \texttt{--list-devices} output reflects the
+the general lesson: \texttt{-{}-list-devices} output reflects the
 environment of whatever process ran it, which is not necessarily the
 environment of the server.
 
@@ -238,9 +245,10 @@ and used the guest-visible Intel iGPU). We retain this host's CUDA cells
 only within the CPU-fallback population and note that our earlier
 ``virtualized 4090'' hardware label was wrong.
 
-\textbf{Detection.} None of the three classes produced any console
-output, even with an explicit \texttt{-ngl} --- the registered RPC
-backend suppresses the engine's only warning, and release builds
+\textbf{Detection.} None of the three classes produced any
+GPU-related console output, even with an explicit \texttt{-ngl} ---
+the registered RPC backend suppresses the engine's only
+GPU-availability warning, and release builds
 swallow backend-load failures silently. Enumeration correctly
 reported no device when the ROCm backend
 could not load; in the CUDA-13 case it reported the GPU --- from a
@@ -280,18 +288,20 @@ Same CPU build, different host-CPU class (23 pairs) & 13.7--20.1\% & 35.3--39.2\
 model files and Q4\_K\_M/Q8\_0 cover six (Qwen2.5-3B was not run at
 F16); cross-host rows compare 578 model--prompt combinations per
 pair (204 at Q4, 204 at Q8, 170 at F16). The second row's 4{,}046
-comparisons contain only 1{,}734 distinct ones: the GPU builds ship
+comparisons collapse to 1{,}734 distinct (host-class, model, prompt)
+combinations --- 1{,}269 distinct content pairs --- because the GPU
+builds ship
 one shared CPU implementation, so fallback runs on hosts sharing a
 CPU class are bit-identical to each other. Equivalence classes are
 empirical --- groups of hosts whose standalone CPU-build outputs are
 identical across all 578 combinations (class A: seven Linux hosts,
 including the TITAN RTX and PRO 6000; class B: the second 7900 XTX
 host and the 4090 guest; the 5060 Ti host is a singleton). The
-classes line up with CPU instruction-set tiers --- class A hosts
-expose AVX-512 without AMX, class B is AVX2-only, and the singleton
-carries AMX --- consistent with the runtime-selected CPU kernel
-variant (process maps show different \texttt{libggml-cpu-*}
-variants on the two directly-mapped fallback hosts). Cross-host rows
+classes track CPU instruction-set tiers --- class A hosts expose
+AVX-512 without AMX, class B hosts lack AVX-512, and the singleton
+carries AMX --- and are coarser than kernel-variant names: the two
+directly-mapped class-B hosts loaded different AVX2-tier CPU variants
+with identical outputs. Cross-host rows
 use the Linux CPU binary only; the two Windows hosts agree with each
 other under the Windows CPU build and are excluded from these rows.
 
@@ -334,18 +344,19 @@ that the
 engine's own documentation warns that prompt-cache reuse can
 introduce run-to-run nondeterminism via batch-shape-dependent
 prefill/decode
-arithmetic\footnote{\texttt{docs/server.md} in the b11327 release
-tree.}; our protocol runs with caching disabled.)
+arithmetic\footnote{\texttt{tools/server/README.md} in the b11327
+release tree.}; our protocol runs with caching disabled.)
 
 \section{Finding 4: divergence anatomy}\label{sec:mechanism}
 
-Among the 7{,}875 first-divergence events (6{,}908 after removing
-identical-stack duplicate events; the figures below use the full set, on
-which the deduplicated percentages agree to within 0.01 percentage
-points), the
+Among the 7{,}875 first-divergence events (6{,}908 after removing the
+same-box re-run's 967 duplicate events; the figures below use the
+full set --- deduplicated top-5 membership is 99.90\% vs the full
+set's 99.89\%), the
 diverging backend's chosen token lies within the reference's recorded
 top-5 in 99.89\% of events. The exceptions are all in SmolLM2
-Q4\_K\_M, at four (model, prompt) loci: the 9 reference-side
+Q4\_K\_M, at four (model, prompt) loci (0-based prompt indices): the
+9 reference-side
 exceptions sit at two (135M prompt 23; 360M prompt 26), the 9
 backend-side exceptions at three (360M prompt 26; 135M prompt 22;
 360M prompt 1), and the two sets overlap in 5 events. The events span the primary per-cell comparison populations: 4{,}796
@@ -418,7 +429,7 @@ then crashed mid-run).
 For practitioners: (1) verify what executed --- the wall-time ratio
 against a CPU baseline is a cheap screening check for silent CPU
 fallback, to be followed by execution-placement checks in the server
-process, and \texttt{--list-devices} output alone does not establish
+process, and \texttt{-{}-list-devices} output alone does not establish
 execution; (2) GPU-versus-local-CPU agreement was 18\%, 35\%, and
 88\% at Q4, Q8, and F16 respectively, with cross-build and
 cross-class CPU comparisons showing the same ordering --- whereas

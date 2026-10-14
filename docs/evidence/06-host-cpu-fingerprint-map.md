@@ -26,11 +26,15 @@ record-internal `created` timestamps.
 
 **12 distinct physical machines, 13 labels** (the two PRO 6000 labels
 are one machine measured twice). The two Arc A770 labels are **two
-separate machines**, not one dual-boot box: both were swept in the same
-batches on different OSes a few hours apart (Linux core run Oct 2
-17:30–18:27; Windows core run Oct 2 22:57–00:17; both labels active in
-the supplemental batch on Oct 3), with independently recorded driver
-inventories. Host-identity statements are the operator's fleet record.
+separate machines per the operator's fleet record** (an early
+design-phase draft called them a two-OS box; that draft was
+superseded by the executed fleet). The record-internal timestamps are
+consistent with two machines — the labels ran different OSes a few
+hours apart in the same batches (Linux core run Oct 2 17:30–18:27;
+Windows core run Oct 2 22:57–00:17; both labels active in the Oct 3
+supplemental batch) with independently recorded driver inventories —
+though the timestamps alone would not rule out a dual-boot box; the
+operator record is what establishes host identity.
 
 ## Output equivalence classes (empirical)
 
@@ -50,13 +54,15 @@ all 578 model–prompt combinations:
   agree 578/578 under the Windows CPU build (a different binary;
   excluded from the Linux cross-host rows).
 
-The classes line up with CPU instruction-set tiers rather than with
-any physical-host property: class A hosts all expose AVX-512 without
-AMX (Rocket Lake–signature Intel hosts plus the Zen 5 APU), class B is
-AVX2-only, and the singleton carries AMX. Consistently, the process
-maps of the two directly-diagnosed class-B fallback runs show
-different runtime-selected CPU kernel variants (`libggml-cpu-haswell`,
-`libggml-cpu-alderlake`).
+The classes track CPU instruction-set tiers rather than with any
+physical-host property: class A hosts all expose AVX-512 without
+AMX (Rocket Lake–signature Intel hosts plus the Zen 5 APU), class B
+hosts lack AVX-512 (the 6-thread XTX host is AVX2-only; the 4090
+guest adds AVX-VNNI), and the singleton carries AMX. The classes are
+coarser than kernel-variant names: the process maps of the two
+directly-diagnosed class-B fallback runs show different
+runtime-selected CPU kernel variants (`libggml-cpu-haswell`,
+`libggml-cpu-alderlake`) with identical outputs.
 
 ## Run windows (record-internal `created` timestamps, core batch)
 
