@@ -260,7 +260,7 @@ Three observations. First, among the GPU/CPU, cross-build CPU, and
 cross-class CPU comparisons, agreement increased strongly with
 precision, and the pooled
 ``$\sim$45--48\% agreement'' that a fixed quant mix produces is a
-mixture artifact --- per-precision rates span 14\% to 93\% in these
+mixture artifact --- per-precision rates span approximately 14\% to 94\% in these
 populations; in contrast, all tested same-class CPU host pairs agreed
 completely at every precision. Second,
 the comparison type is a second-order effect: GPU-vs-CPU, one
@@ -272,8 +272,9 @@ tested} is largely absent at Q4-class precision and partially
 preserved at F16. Third, the CPU
 reference is itself stack-relative in two senses: the same CPU build
 produces bit-identical outputs across all hosts within a host-CPU
-equivalence class (our fleet has two such Linux classes plus a
-Windows pair), while across classes it diverges like any other stack
+equivalence class (our Linux fleet has two nonsingleton equivalence
+classes and one singleton; the Windows pair also agrees internally),
+while across classes it diverges like any other stack
 change. ``Same result as CPU'' therefore means ``same result as this
 host's CPU build --- and only hosts in its equivalence class''.
 
@@ -302,8 +303,8 @@ points), the
 diverging backend's chosen token lies within the reference's recorded
 top-5 in 99.89\% of events. The exceptions are concentrated in
 SmolLM2 Q4\_K\_M at two (model, prompt) loci --- 9 reference-side and
-9 backend-side exceptions that overlap in only 5 events. The events
-span all comparison populations: 4{,}796 GPU-vs-CPU, 2{,}112
+9 backend-side exceptions that overlap in only 5 events. The events span the primary per-cell comparison populations: 4{,}796
+GPU-vs-CPU, 2{,}112
 build-CPU-vs-CPU, and 967 from the re-run machine's cells against its
 own CPU reference. Each directional gap is available for 7{,}866
 events (both gaps jointly for 7{,}862 of them); the quantiles below
