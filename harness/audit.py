@@ -24,16 +24,25 @@ from collections import defaultdict
 RATIO_THRESHOLD = 0.85   # >= -> classified cpu-fallback
 BOOTSTRAP_REPS = 1000
 
-# Identical-stack groups for dedup: (gpu family, backend) -> [labels]
+# Identical-stack dedup groups. A duplicate event requires an identical
+# stack AND an identical comparison: the two PRO 6000 labels are the
+# same physical box re-run ~12h apart (same build, same same-box CPU
+# reference), so their cuda/vulkan/cuda13 events are true duplicates.
+# The two 7900 XTX boxes are DIFFERENT machines: their vulkan outputs
+# are bit-identical, but their same-box CPU references belong to
+# different host-CPU equivalence classes, so those events are NOT
+# duplicates and must be kept. (Corrected 2026-10-13 after an external
+# review found the previous grouping wrongly dropped the second XTX's
+# 317 vulkan events and wrongly kept the re-run's 312 cuda13 events.)
 IDENTICAL_STACK_GROUPS = [
-    ("vulkan", ["radeon-rx-7900-xtx-linux", "radeon-rx-7900-xtx-2-linux"]),
     ("vulkan", ["rtx-pro-6000-blackwell-linux", "rtx-pro-6000-blackwell-2-linux"]),
     ("cuda",   ["rtx-pro-6000-blackwell-linux", "rtx-pro-6000-blackwell-2-linux"]),
+    ("cuda13", ["rtx-pro-6000-blackwell-linux", "rtx-pro-6000-blackwell-2-linux"]),
 ]
 DEDUP_REPRESENTATIVE = {
-    ("vulkan", "radeon-rx-7900-xtx-2-linux"),
     ("vulkan", "rtx-pro-6000-blackwell-2-linux"),
     ("cuda", "rtx-pro-6000-blackwell-2-linux"),
+    ("cuda13", "rtx-pro-6000-blackwell-2-linux"),
 }
 
 # rtx-pro-6000-blackwell-2-linux is the SAME physical box as

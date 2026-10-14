@@ -395,7 +395,7 @@
   "in_top5_pct_of_first_div": 99.89,
   "dedup": {
     "first_div_events_all": 7875,
-    "first_div_events_dedup": 6903,
-    "dropped_duplicate_stack_events": 972
+    "first_div_events_dedup": 6908,
+    "dropped_duplicate_stack_events": 967
   }
 }

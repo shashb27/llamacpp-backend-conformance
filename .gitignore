@@ -16,4 +16,7 @@ paper/main.fdb_latexmk
 
 incoming/
 
-docs/reviews/
+docs/reviews/results/raw/
+paper/technote.aux
+paper/technote.log
+paper/technote.out
