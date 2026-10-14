@@ -27,6 +27,17 @@ VRAM with an explicit `-ngl 999`. Corrected numbers:
 [`results/audit-v2.json`](results/audit-v2.json)
 (`populations.POP-BUILDCPU.by_backend.rocm`).
 
+Since then, a source-level check of the b11327 release turned up a
+second imprecision in that comment: the `--gpu-layers option will be
+ignored` warning it calls "the only hint" never actually prints in
+this configuration. That warning lives only inside the `-ngl` option
+handler, and even when `-ngl` is passed it is suppressed whenever the
+bundled RPC backend is registered — which the official prebuilts
+always load. Release builds also swallow the backend-load failure
+itself silently. In runs like mine there was no console hint at all.
+The full breakdown, with the relevant b11327 source, is in
+[`docs/evidence/02-silent-warning-mechanism.md`](docs/evidence/02-silent-warning-mechanism.md).
+
 ## Data layout
 
 In-repo: the harness, the analysis outputs (`results/analysis*.json`, `results/matrix*`), the device-truth audit (`results/audit-v2.json`), hardware/driver versions (`results/hardware-versions.md`), the pilot batch (`results/raw-v0/`), quarantined cells (`results/raw-excluded-4090-vulkan/`), and pinned-device verifications (`results/vk-verify/`).
