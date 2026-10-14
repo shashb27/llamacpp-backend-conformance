@@ -55,6 +55,10 @@ For every (model, backend, hardware) cell:
 
 Speed. Throughput/latency on this hardware is covered by other benchmarking efforts; mixing it in would blur the correctness signal. This repo is about numerical agreement only.
 
+## Fleet operation
+
+The 12-machine fleet was orchestrated end-to-end — remote sweeps, artifact transfer, per-box checkpointing — via [OxCapsule](https://oxmiq.ai/oxcapsule), OXMIQ Labs' fleet-management platform for heterogeneous AI compute.
+
 ## Reproduce
 
 Requires Python 3.8+ (stdlib only) and ~1 GB disk for the pinned model.

@@ -13,7 +13,9 @@
 
 \title{\bf Auditing Actual Execution and Output Portability in
 Quantized LLM Inference:\\ A Measurement Study of llama.cpp}
-\author{Shashvath Bhaskar}
+\author{Shashvath Bhaskar\\
+Product Lead, Oxmiq Labs\\
+\texttt{shashvath.bhaskar@oxmiq.ai}}
 \date{October 2026 (technical note)}
 
 \begin{document}
@@ -127,7 +129,11 @@ turned out to lack access to its advertised NVIDIA GPU
 --- \S\ref{sec:fallback}), AMD (RX 7900
 XTX $\times$2, Radeon AI PRO R9700, Strix Halo 8060S), Intel (Arc A770
 Linux + Windows, Arc B60); hosts span several CPU generations and both
-desktop OSes.
+desktop OSes. The entire fleet was orchestrated from a single
+workstation through OxCapsule~\cite{oxcapsule}, a fleet-management
+platform for heterogeneous AI compute: each host ran one pinned,
+resumable sweep session, with records checkpointed and archived after
+every machine.
 
 \textbf{Engine and models.} llama.cpp release b11327, official
 prebuilt binaries only, SHA256 recorded. 17 core GGUF model files:
@@ -206,10 +212,9 @@ implementation, which is shared across the ROCm, CUDA, and CUDA-13
 release builds and differs from the standalone CPU build's. The
 fallback outputs are bit-identical across the
 three AMD hosts sharing a host-CPU class (578/578 pairwise),
-consistent with same-build, same-CPU-class execution. Related reports
-exist upstream for Windows and other
-setups\footnote{ggml-org/llama.cpp issues \#26964, \#22748, \#26929,
-\#27923.}; our contribution is the
+consistent with same-build, same-CPU-class execution. Similar
+behavior has been publicly reported by other users for Windows and
+other setups on the project's public issue tracker; our contribution is the
 Linux SONAME detail, the cross-host confirmation, and the benchmarking
 consequence: quality measurements taken this way measure \emph{a} CPU
 implementation --- the fallback build's own, not the standalone CPU
@@ -445,7 +450,26 @@ per-token logprob dataset, and the audit tooling at
 \url{https://github.com/shashb27/llamacpp-backend-conformance}
 (dataset: v1.0 release).
 
-\begin{thebibliography}{12}
+\section*{Acknowledgments}
+
+This study was enabled end-to-end by OxCapsule~\cite{oxcapsule}, OXMIQ
+Labs' fleet-management and remote-execution platform for heterogeneous
+AI compute (\url{https://oxmiq.ai/oxcapsule}): the 12-machine,
+three-vendor, two-OS fleet was swept, checkpointed, and audited from a
+single workstation. The author is a Product Lead at OXMIQ Labs, which
+develops OxCapsule; the platform is named here for transparency about
+how the measurements were produced.
+
+\paragraph{Use of AI tools.}
+Generative AI tools were used, under the author's direction and
+review, in preparing this manuscript and in developing the
+accompanying analysis code. The author is responsible for all content.
+The analysis pipeline is fully released and deterministic: every
+number reported here is recomputable from the public raw dataset, and
+the headline results were reproduced by two independently developed
+recomputation scripts.
+
+\begin{thebibliography}{13}
 \small
 
 \bibitem{schlogl2023}
@@ -529,6 +553,13 @@ systems: An analysis of variance.
 \newblock In \emph{IEEE/ACM International Conference on Automated Software
 Engineering (ASE)}, pages 771--783, 2020.
 \newblock doi:10.1145/3324884.3416545.
+
+\bibitem{oxcapsule}
+OXMIQ Labs.
+\newblock OxCapsule: Fleet management and inference for heterogeneous
+AI compute.
+\newblock \url{https://oxmiq.ai/oxcapsule}. Public beta, November 2025;
+accessed October 2026.
 
 \end{thebibliography}
 
