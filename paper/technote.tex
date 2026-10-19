@@ -220,6 +220,21 @@ observed timing separation, corroborated by device listings in the
 later supplemental records (the core records predate that field). A
 configuration at $\approx 1.0$ is classified \emph{CPU-fallback} and
 analyzed as its own population, never as a GPU backend.
+Figure~\ref{fig:audit} shows the split for all 25 classified
+configurations.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.86\textwidth]{fig-audit}
+\caption{The device-truth audit's screening signal: median per-prompt
+wall-time ratio against the same host's CPU build, for every
+(machine, backend) configuration in the dataset. The split is clean
+--- GPU-classified configurations (blue) sit at 0.06--0.66, fallback
+configurations (red) at 1.00--1.03, with nothing in between. Data:
+\texttt{results/audit-v2.json} (\texttt{devices}); figure regenerable
+with \texttt{harness/make\_figs.py}.}
+\label{fig:audit}
+\end{figure}
 
 \section{Finding 1: silent CPU fallback}\label{sec:fallback}
 
@@ -362,7 +377,8 @@ outputs. Cross-host rows use the Linux CPU binary only; the two
 Windows hosts agree with each other under the Windows CPU build and
 are excluded from these rows.
 
-Three observations follow from the table.
+Three observations follow from the table
+(Figure~\ref{fig:precision} shows the precision structure visually).
 
 \emph{Quantization dominates.} Among the GPU/CPU, cross-build CPU, and
 cross-class CPU comparisons, agreement rises strongly with precision.
@@ -386,6 +402,18 @@ equivalence classes above (the Linux fleet has two nonsingleton
 classes and one singleton; the Windows pair also agrees internally).
 ``Same result as CPU'' therefore means ``same result as this host's
 CPU build, and only hosts in its equivalence class''.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.9\textwidth]{fig-precision}
+\caption{Byte-exact agreement by precision and population. Bars show
+the two primary populations; the short vertical lines span the
+cross-class CPU host-pair range; the dashed line marks the 100\%
+agreement of every same-class CPU host pair. Data:
+\texttt{results/audit-v2.json} (\texttt{per\_quant}); figure
+regenerable with \texttt{harness/make\_figs.py}.}
+\label{fig:precision}
+\end{figure}
 
 \section{Finding 3: agreement in identical-stack controls}\label{sec:determinism}
 
@@ -441,7 +469,21 @@ Divergence at greedy decoding is therefore concentrated at near-ties.
 This is compatible with the rounding-order mechanism assumed in prior
 work~\cite{du2026}, though the data do not by themselves exclude small
 systematic implementation differences that would also preferentially
-flip low-margin decisions.
+flip low-margin decisions. Figure~\ref{fig:gaps} summarizes the gap
+distributions.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.82\textwidth]{fig-gaps}
+\caption{How close the competing tokens are at first divergence:
+quantiles of the logprob gap in both distributions (n = 7{,}866 events
+per direction). The median gap is about six hundredths of a nat ---
+near-ties --- and 90.0\% of divergences are mutual rank-1$\leftrightarrow$2
+swaps. Data: \texttt{results/audit-v2.json}
+(\texttt{gap\_ref\_quantiles}, \texttt{gap\_backend\_quantiles});
+figure regenerable with \texttt{harness/make\_figs.py}.}
+\label{fig:gaps}
+\end{figure}
 
 \section{Related work}\label{sec:related}
 
